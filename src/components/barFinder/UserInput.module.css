@@ -1,0 +1,32 @@
+.user-input {
+  justify-self: flex-end;
+}
+
+.user-input form {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background-color: #292524;
+  padding: 1rem;
+}
+
+.user-input div {
+  text-align: center;
+  background-color: #44403c;
+  font-weight: bolder;
+}
+
+@media (min-width: 900px) {
+  .user-input {
+    margin-right: 1em;
+  }
+
+  .user-input form {
+    gap: 1rem;
+    padding: 2rem;
+  }
+
+  .user-input div {
+    padding: .5em;
+  }
+}

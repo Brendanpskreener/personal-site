@@ -1,0 +1,37 @@
+.list {
+  list-style: none;
+  background-color: #0c0a09;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+.list li {
+  display: inline-block;
+  position: relative;
+}
+
+.list li a {
+  display: block;
+  padding: 8px 25px;
+}
+
+.list li a:hover,
+.list li a.active {
+  background-color: #44403c;
+}
+
+.list li .dropdown {
+  min-width: 100%;
+  display: none;
+  position: absolute;
+  background-color: #0c0a09;
+}
+
+.list li:hover .dropdown {
+  display: block;
+}
+
+.list li .dropdown li {
+  display: block;
+}

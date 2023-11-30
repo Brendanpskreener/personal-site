@@ -1,0 +1,10 @@
+.pagination {
+  grid-row-start: 2;
+  grid-column-start: 2;
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin: 1em auto;
+  background-color: #292524;
+  padding: 1em;
+}

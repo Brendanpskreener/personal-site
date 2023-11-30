@@ -2,7 +2,7 @@ import { useState } from 'react'
 import MainNavigation from './components/UI/MainNavigation'
 import Home from './components/Home/Home'
 import BarFinder from './components/BarFinder/BarFinder'
-import Pomodoro from './components/pomodoro/Pomodoro'
+import Pomodoro from './components/Pomodoro/Pomodoro'
 
 export default function App() {
   const [page, setPage] = useState('home')

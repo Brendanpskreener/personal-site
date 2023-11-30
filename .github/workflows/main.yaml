@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: react build and deploy
     runs-on: ubuntu-latest
 
     steps:

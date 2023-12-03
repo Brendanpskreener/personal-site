@@ -23,3 +23,13 @@ body {
 ul {
   padding-inline-start: 0px;
 }
+
+.card {
+  display: flex;
+  justify-content: center;
+  padding: 2em;
+}
+
+.title {
+  text-align: center;
+}

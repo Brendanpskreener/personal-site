@@ -3,11 +3,11 @@ import classes from './UserInput.module.css'
 import { BarFinderContext } from "../../store/BarFinderContext"
 
 export default function UserInput() {
-  const { handleSearch, locationUnavailable, currentPage } = useContext(BarFinderContext)
+  const { handleSearch, locationUnavailable, currentPage, handlePageTurn } = useContext(BarFinderContext)
   const defaultState = { name: '', zipcode: '', page: 1, locationToggle: !locationUnavailable }
   const [formData, setFormData] = useState(defaultState)
   const [timer, setTimer] = useState(null)
-  const [formIsValid, setFormIsValid] = useState(true)
+  const [formIsValid, setFormIsValid] = useState(false)
 
   function autoSearch() {
     clearTimeout(timer)
@@ -41,12 +41,15 @@ export default function UserInput() {
   }
 
   useEffect(() => {
-    console.log('form validity changed')
     if (formIsValid) {
-      handleSearch(formData)
+      handleSearch({ ...formData, page: 1 })
       setFormIsValid(false)
     }
   }, [formIsValid])
+
+  useEffect(() => {
+    handlePageTurn({ ...formData, page: currentPage })
+  }, [currentPage])
 
   return (
     <div className={classes['user-input']}>

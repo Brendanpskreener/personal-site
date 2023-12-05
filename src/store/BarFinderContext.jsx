@@ -31,6 +31,9 @@ function barFinderReducer(state, { type, payload }) {
   if (type === 'next_page') {
     return { ...state, currentPage: state.currentPage + 1 }
   }
+  if (type === 'turn_page') {
+    return { ...state, barlist: payload }
+  }
   return state
 }
 
@@ -61,6 +64,17 @@ export default function BarFinderContextProvider({ children }) {
     }
   }
 
+  //I dont like this redundancy. pass a second argument to the function and then pass that as a flag to the dispatch. put a nested if check in the reducer to catch the flag and update state accordingly
+
+  async function handlePageTurn(query) {
+    try {
+      const bars = await findBars({ ...query, ...currentLocation, perPage })
+      barFinderDispatch({ type: 'turn_page', payload: bars })
+    } catch (error) {
+      console.warn(error)
+    }
+  }
+
   function previousPage() {
     if (currentPage !== 1) {
       barFinderDispatch({ type: 'prev_page' })
@@ -80,7 +94,8 @@ export default function BarFinderContextProvider({ children }) {
     perPage,
     handleSearch,
     previousPage,
-    nextPage
+    nextPage,
+    handlePageTurn
   }
 
   useEffect(() => {

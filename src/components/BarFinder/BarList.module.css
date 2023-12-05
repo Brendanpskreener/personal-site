@@ -2,3 +2,11 @@
   background-color: #292524;
   margin-bottom: auto;
 }
+
+.zilch {
+  text-align: center;
+  padding: 1em;
+  margin: 0 auto auto auto;
+  font-size: 2em;
+  font-weight: bold;
+}

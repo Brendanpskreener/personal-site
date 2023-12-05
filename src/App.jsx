@@ -2,8 +2,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Root from './pages/Root'
 import Error from './pages/Error'
 import Home from './pages/Home'
-import BarFinder from './components/BarFinder/BarFinder'
 import Pomodoro from './components/Pomodoro/Pomodoro'
+import BarRoute from './pages/BarRoute'
 
 const router = createBrowserRouter([
   {
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       { path: '/', element: <Home /> },
-      { path: '/barfinder', element: <BarFinder /> },
+      { path: '/barfinder', element: <BarRoute /> },
       { path: '/pomodoro', element: <Pomodoro /> },
     ]
   }

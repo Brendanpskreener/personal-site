@@ -1,7 +1,9 @@
+import { useContext } from 'react'
 import classes from './Pagination.module.css'
+import { BarFinderContext } from '../../store/BarFinderContext'
 
-export default function Pagination(props) {
-  const { currentPage, previousPage, nextPage, perPage, pageLength } = props
+export default function Pagination() {
+  const { barlist, currentPage, perPage, previousPage, nextPage } = useContext(BarFinderContext)
 
   return (
     <div className={classes.pagination}>
@@ -9,7 +11,7 @@ export default function Pagination(props) {
         Prev
       </button>
       <div>{currentPage}</div>
-      <button onClick={nextPage} disabled={pageLength < perPage}>
+      <button onClick={nextPage} disabled={barlist.length < perPage}>
         Next
       </button>
     </div>

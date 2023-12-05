@@ -1,10 +1,14 @@
 import classes from './BarList.module.css'
 import Bar from "./Bar";
+import { useContext } from 'react';
+import { BarFinderContext } from '../../store/BarFinderContext';
 
-export default function BarList({ bars }) {
+export default function BarList() {
+  const { barlist } = useContext(BarFinderContext)
+
   return (
     <div className={classes['bar-list']}>
-      {bars.map((bar) => (
+      {barlist.length > 0 ? barlist.map((bar) => (
         <Bar
           key={bar.id}
           name={bar.name}
@@ -15,7 +19,7 @@ export default function BarList({ bars }) {
           phone={bar.phone}
           site={bar.website_url}
         />
-      ))}
+      )) : <div className={classes.zilch}>Found no Bars</div>}
     </div>
   )
 }

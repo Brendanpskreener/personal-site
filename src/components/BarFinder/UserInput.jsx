@@ -3,7 +3,7 @@ import classes from './UserInput.module.css'
 import { BarFinderContext } from "../../store/BarFinderContext"
 
 export default function UserInput() {
-  const { handleSearch, locationUnavailable, currentPage, handlePageTurn } = useContext(BarFinderContext)
+  const { handleSearch, locationUnavailable, currentPage } = useContext(BarFinderContext)
   const defaultState = { name: '', zipcode: '', page: 1, locationToggle: !locationUnavailable }
   const [formData, setFormData] = useState(defaultState)
   const [timer, setTimer] = useState(null)
@@ -42,13 +42,13 @@ export default function UserInput() {
 
   useEffect(() => {
     if (formIsValid) {
-      handleSearch({ ...formData, page: 1 })
+      handleSearch({ ...formData, page: 1 }, 'reset')
       setFormIsValid(false)
     }
   }, [formIsValid])
 
   useEffect(() => {
-    handlePageTurn({ ...formData, page: currentPage })
+    handleSearch({ ...formData, page: currentPage })
   }, [currentPage])
 
   return (

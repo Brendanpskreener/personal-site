@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, test } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/react'
-import BarFinder from "./BarFinder"
+import BarRoute from './BarRoute'
 
 describe('BarFinder', () => {
   beforeEach(() => {
-    render(<BarFinder />)
+    render(<BarRoute />)
   })
   test('should always show header', () => {
     expect(screen.getByText('Bar Finder')).toBeInTheDocument()

@@ -1,9 +1,7 @@
 .bar-list {
-  /* background-color: #292524; */
   margin-bottom: auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .zilch {
@@ -11,4 +9,10 @@
   margin: 0 auto auto auto;
   font-size: 2em;
   font-weight: bold;
+}
+
+@media (min-width: 900px) {
+  .bar-list {
+    gap: 1rem;
+  }
 }

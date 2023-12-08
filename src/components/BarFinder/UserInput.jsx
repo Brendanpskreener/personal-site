@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react"
 import classes from './UserInput.module.css'
 import { BarFinderContext } from "../../store/BarFinderContext"
+import { motion } from "framer-motion"
 
 export default function UserInput() {
   const { handleSearch, locationUnavailable, currentPage } = useContext(BarFinderContext)
@@ -52,7 +53,7 @@ export default function UserInput() {
   }, [currentPage])
 
   return (
-    <div className={classes['user-input']}>
+    <motion.div className={classes['user-input']} initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
       <div>Filters</div>
       <form>
         <input type="search" placeholder="Bar Name" name="name" value={formData.name} onChange={handleNameChange} />
@@ -62,7 +63,6 @@ export default function UserInput() {
           {locationUnavailable ? 'User Denied Location' : 'Use Location'}
         </label>
       </form>
-    </div>
-
+    </motion.div>
   )
 }

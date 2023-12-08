@@ -16,7 +16,7 @@ const initialState = {
 export const BarFinderContext = createContext(initialState)
 
 function barFinderReducer(state, { type, payload, id }) {
-  if (type === 'get_bars') {
+  if (type === 'set_bars') {
     let newState
     if (id === 'reset') {
       newState = { ...state, barlist: payload, currentPage: 1 }
@@ -25,7 +25,7 @@ function barFinderReducer(state, { type, payload, id }) {
     }
     return newState
   }
-  if (type === 'get_location') {
+  if (type === 'set_location') {
     return { ...state, currentLocation: payload, locationUnavailable: false }
   }
   if (type === 'set_loading') {
@@ -50,7 +50,7 @@ export default function BarFinderContextProvider({ children }) {
     })
     try {
       const { coords: { latitude, longitude } } = await promise
-      barFinderDispatch({ type: 'get_location', payload: { latitude, longitude } })
+      barFinderDispatch({ type: 'set_location', payload: { latitude, longitude } })
     } catch (error) {
       console.warn(error)
     } finally {
@@ -61,7 +61,7 @@ export default function BarFinderContextProvider({ children }) {
   async function handleSearch(query, id) {
     try {
       const bars = await findBars({ ...query, ...currentLocation, perPage })
-      barFinderDispatch({ type: 'get_bars', payload: bars, id })
+      barFinderDispatch({ type: 'set_bars', payload: bars, id })
     } catch (error) {
       console.warn(error)
     }

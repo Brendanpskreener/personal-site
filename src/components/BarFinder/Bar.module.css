@@ -1,7 +1,6 @@
 .bar {
-  margin: 1rem;
   padding: 1rem;
-  background-color: #44403c;
+  background-color: rgb(34 35 36);
   text-align: center;
 }
 
@@ -12,6 +11,10 @@
 .bar h3 {
   margin: 0;
   font-size: 1rem;
+}
+
+.bar a {
+  color: rgb(5 122 240);
 }
 
 @media (max-width: 900px) {

@@ -8,7 +8,7 @@ export default function BarList() {
 
   return (
     <div className={classes['bar-list']}>
-      {barlist.length > 0 ? barlist.map((bar) => (
+      {barlist.length > 0 ? barlist.map((bar, index) => (
         <Bar
           key={bar.id}
           name={bar.name}
@@ -18,6 +18,7 @@ export default function BarList() {
           zipcode={bar.postal_code}
           phone={bar.phone}
           site={bar.website_url}
+          index={index}
         />
       )) : <div className={classes.zilch}>Found no Bars</div>}
     </div>

@@ -19,7 +19,12 @@
   box-sizing: border-box;
 }
 
-.list a:hover,
 .list a.active {
   border-bottom-color: rgb(5 122 240);
+}
+
+@media (min-width: 900px) {
+  .list a:hover {
+    border-bottom-color: rgb(5 122 240);
+  }
 }

@@ -2,8 +2,8 @@ import { motion } from 'framer-motion'
 import classes from './Bar.module.css'
 
 export default function Bar(props) {
-  const { name, street, city, state, zipcode, phone, site, index } = props
-  const directionsUrl = ['https://www.google.com/maps/place/', street, city, state, zipcode]
+  const { name, phone, site, index } = props
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${name}`
   let formattedPhone
   if (phone) {
     formattedPhone = phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')

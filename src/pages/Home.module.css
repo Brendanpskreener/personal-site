@@ -1,0 +1,20 @@
+.card {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 2em;
+  margin-top: 20rem;
+}
+
+.card p {
+  font-size: large;
+  font-weight: 400;
+  font: bold;
+  max-width: 540px;
+  margin: 0;
+}
+
+.card span {
+  font-size: larger;
+  color: rgb(5 122 240);
+}

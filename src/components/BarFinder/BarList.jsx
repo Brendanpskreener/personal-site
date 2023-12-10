@@ -12,10 +12,6 @@ export default function BarList() {
         <Bar
           key={bar.id}
           name={bar.name}
-          street={bar.street}
-          city={bar.city}
-          state={bar.state}
-          zipcode={bar.postal_code}
           phone={bar.phone}
           site={bar.website_url}
           index={index}

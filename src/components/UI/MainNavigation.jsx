@@ -10,7 +10,11 @@ export default function MainNavigation() {
 
   return (
     <>
-      <div className={classes.trigger} onClick={toggleMenu}>Trigger</div>
+      <div className={classes.trigger} onClick={toggleMenu}>
+        <span className={classes.burger}></span>
+        <span className={classes.burger}></span>
+        <span className={classes.burger}></span>
+      </div>
       <div className={isOpen ? classes.open : classes.list}>
         <NavLink
           to='/'

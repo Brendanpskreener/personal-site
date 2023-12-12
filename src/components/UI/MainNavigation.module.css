@@ -27,7 +27,17 @@
 }
 
 .trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.burger {
   display: block;
+  width: 25px;
+  height: 3px;
+  margin: 3px;
+  background-color: rgb(5 122 240);
 }
 
 .open {

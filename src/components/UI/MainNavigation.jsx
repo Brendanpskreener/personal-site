@@ -7,6 +7,9 @@ export default function MainNavigation() {
   function toggleMenu() {
     setIsOpen((prevState) => !prevState)
   }
+  function closeMenu() {
+    setIsOpen(false)
+  }
 
   return (
     <>
@@ -19,17 +22,22 @@ export default function MainNavigation() {
         <NavLink
           to='/'
           className={({ isActive }) => isActive ? classes.active : undefined}
+          onClick={closeMenu}
           end>
           Home
         </NavLink>
         <NavLink
           to='/barfinder'
-          className={({ isActive }) => isActive ? classes.active : undefined}>
+          className={({ isActive }) => isActive ? classes.active : undefined}
+          onClick={closeMenu}
+        >
           Bar Finder
         </NavLink>
         <NavLink
           to='pomodoro'
-          className={({ isActive }) => isActive ? classes.active : undefined}>
+          className={({ isActive }) => isActive ? classes.active : undefined}
+          onClick={closeMenu}
+        >
           Pomodoro
         </NavLink>
       </div>

@@ -34,11 +34,11 @@ export default function MainNavigation() {
           Bar Finder
         </NavLink>
         <NavLink
-          to='pomodoro'
+          to='store'
           className={({ isActive }) => isActive ? classes.active : undefined}
           onClick={closeMenu}
         >
-          Pomodoro
+          Store
         </NavLink>
       </div>
     </>

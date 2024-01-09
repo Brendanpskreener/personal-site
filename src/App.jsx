@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Root from './pages/Root'
 import Error from './pages/Error'
 import Home from './pages/Home'
-import Pomodoro from './components/Pomodoro/Pomodoro'
+import Store from './components/Store/Store'
 import BarRoute from './pages/BarRoute'
 
 const router = createBrowserRouter([
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       { path: '/barfinder', element: <BarRoute /> },
-      { path: '/pomodoro', element: <Pomodoro /> },
+      { path: '/store', element: <Store /> },
     ]
   }
 ])

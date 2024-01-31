@@ -1,0 +1,83 @@
+import classes from './StorePagination.module.css'
+
+export default function StorePagination(props) {
+  const { onPageChange, siblingCount = 1, currentPage, totalPageCount } = props
+  const totalPageNumbers = siblingCount + 5
+
+  function range(start, end) {
+    let length = end - start + 1
+    const result = Array.from({ length }, (element, index) => index + start)
+    //console.log(result)
+    return result
+  }
+
+  function main() {
+
+    //console.log(totalPageNumbers, totalPageCount)
+    if (totalPageNumbers >= totalPageCount) {
+      return range(1, totalPageCount)
+    }
+    const leftSiblingIndex = Math.max(currentPage - siblingCount, 1)
+    const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPageCount)
+    const shouldShowLeftDots = leftSiblingIndex > 2
+    const shouldShowRightDots = rightSiblingIndex < totalPageCount - 2
+    const firstPageIndex = 1
+    const lastPageIndex = totalPageCount
+    //console.log(!shouldShowLeftDots, shouldShowRightDots)
+    if (!shouldShowLeftDots && shouldShowRightDots) {
+      let leftItemCount = 3 + 2 * siblingCount
+      let leftRange = range(1, leftItemCount)
+      return [...leftRange, '...', totalPageCount]
+    }
+    //console.log(shouldShowLeftDots, !shouldShowRightDots)
+    if (shouldShowLeftDots && !shouldShowRightDots) {
+      let rightItemCount = 3 + 2 * siblingCount
+      let rightRange = range(totalPageCount - rightItemCount + 1, totalPageCount)
+      return [firstPageIndex, '...', ...rightRange]
+    }
+    //console.log(shouldShowLeftDots, shouldShowRightDots)
+    if (shouldShowLeftDots && shouldShowRightDots) {
+      let middleRange = range(leftSiblingIndex, rightSiblingIndex)
+      return [firstPageIndex, '...', ...middleRange, '...', lastPageIndex]
+    }
+  }
+
+  function nextPage() {
+    if (currentPage !== totalPageCount) {
+      onPageChange(currentPage + 1)
+    }
+  }
+  function previousPage() {
+    if (currentPage !== 1) {
+      onPageChange(currentPage - 1)
+    }
+  }
+
+  function changePage(pageNumber) {
+    if (pageNumber !== '...') {
+      onPageChange(pageNumber)
+    }
+  }
+
+  //console.log('pagination rendered', main())
+
+  const paginationRange = main()
+
+  return (
+    <span className={classes['pagination-container']}>
+      <li className={classes["pagination-item"]} onClick={previousPage} disabled={currentPage === 1}>
+        {'<'}
+      </li>
+      {paginationRange.map((pageNumber) => {
+        return (
+          <li className={pageNumber === currentPage ? classes["pagination-item-selected"] : classes["pagination-item"]} key={Math.random()} onClick={() => changePage(pageNumber)} disabled={pageNumber === '...'}>
+            {pageNumber}
+          </li>
+        )
+      })}
+      <li className={classes["pagination-item"]} onClick={nextPage} disabled={currentPage === totalPageCount}>
+        {'>'}
+      </li>
+    </span>
+  )
+}

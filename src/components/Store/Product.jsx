@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import findImage from '../../interfaces/FindImage'
 import { BlurhashCanvas } from "react-blurhash";
+import setUserFavorite from "../../interfaces/setUserFavorite";
 
 export default function Product({
   name,
@@ -29,7 +30,6 @@ export default function Product({
     getImage()
   }, [])
 
-
   const formatPrice = (msrp) => [`${msrp}`.slice(0, -2), `${msrp}`.slice(-2)];
 
   return (
@@ -44,7 +44,7 @@ export default function Product({
         </span>
       </div>
       <p className="product-actions">
-        <button>Add to faves</button>
+        <button onClick={() => setUserFavorite('63d53f91-4ea5-4bc5-92e4-c9191687f11d', productId)}>Add to faves</button>
       </p>
     </article>
   )

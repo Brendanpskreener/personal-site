@@ -1,12 +1,8 @@
 import axios from "axios";
 
-export default async function findProducts(args = {}) {
+export default async function findFavorites(args = {}) {
   const { from, size, userId } = args
-  let baseURL = new URL('https://xkw4oz08el.execute-api.us-west-2.amazonaws.com/product')
-  if (userId) {
-    baseURL = new URL(`https://xkw4oz08el.execute-api.us-west-2.amazonaws.com/user/${userId}/favorite`)
-  }
-
+  const baseURL = new URL(`https://xkw4oz08el.execute-api.us-west-2.amazonaws.com/user/${userId}/favorite`)
   if (from) {
     baseURL.searchParams.append("from", from)
   }

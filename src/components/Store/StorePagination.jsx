@@ -1,7 +1,10 @@
+import { useContext } from 'react'
 import classes from './StorePagination.module.css'
+import { StoreContext } from '../../store/StoreContext'
 
 export default function StorePagination(props) {
-  const { onPageChange, siblingCount = 1, currentPage, totalPageCount } = props
+  const { totalPageCount, onPageChange, currentPageNumber: currentPage } = useContext(StoreContext)
+  const { siblingCount = 1 } = props
   const totalPageNumbers = siblingCount + 5
 
   function range(start, end) {

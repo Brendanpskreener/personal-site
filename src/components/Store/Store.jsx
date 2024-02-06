@@ -1,44 +1,26 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import Product from "./Product";
-import findProducts from "../../interfaces/FindProducts";
 import StorePagination from "./StorePagination";
+import { StoreContext } from "../../store/StoreContext";
 
 export default function Store() {
-  const [productList, setProductList] = useState([])
-  const [pagination, setPagination] = useState({ from: 0, size: 1, total: 0 })
-  const [currentPageNumber, setCurrentPageNumber] = useState(1)
-  const [userPageSize, setUserPageSize] = useState(5)
-
-
-  async function getStore() {
-    try {
-      const { results, pagination } = await findProducts({ from: (currentPageNumber - 1) * userPageSize, size: userPageSize })
-      setProductList(results)
-      setPagination(pagination)
-    } catch (error) {
-      console.warn(error)
-    }
-  }
-
-  function onPageChange(page) {
-    setCurrentPageNumber(page)
-  }
-
-  useEffect(() => {
-    getStore()
-  }, [currentPageNumber, userPageSize])
-
-  const totalPageCount = Math.ceil(pagination.total / pagination.size)
+  const { productList, filtered, changeFilter, totalPageCount } = useContext(StoreContext)
 
   return (
     <section className="shop">
-      <h1 className="title">AI Shop</h1>
+      <div className="header">
+        <h1>AI Shop</h1>
+        <div>
+          <span className={filtered === 0 ? 'selected' : null} onClick={() => changeFilter(0)}>All Products</span>
+          <span className={filtered === 1 ? 'selected' : null} onClick={() => changeFilter(1)}>Favorites</span>
+        </div>
+      </div>
       <ul className="products">
-        {productList.map((product, index) => (
+        {productList.length > 0 ? productList.map((product, index) => (
           <Product key={product.productId} {...product} />
-        ))}
+        )) : <h1 className="title">No Results</h1>}
       </ul>
-      {totalPageCount > 1 && <StorePagination totalPageCount={totalPageCount} onPageChange={onPageChange} currentPage={currentPageNumber} />}
+      {totalPageCount > 1 && <StorePagination />}
     </section>
   )
 }

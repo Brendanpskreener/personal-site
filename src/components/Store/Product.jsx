@@ -1,14 +1,19 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import findImage from '../../interfaces/FindImage'
 import { BlurhashCanvas } from "react-blurhash";
+import setUserFavorite from "../../interfaces/setUserFavorite";
+import deleteUserFavorite from "../../interfaces/deleteUserFavorite";
+import { StoreContext } from "../../store/StoreContext";
 
 export default function Product({
   name,
   blurHash,
   msrp,
   productId,
-  slogan
+  slogan,
+  faved
 }) {
+  const { userId, getFavorites } = useContext(StoreContext)
   const [image, setImage] = useState([])
   const [imageLoading, setImageLoading] = useState(true)
 
@@ -25,13 +30,21 @@ export default function Product({
     }
   }
 
+  async function toggleFavorite() {
+    if (faved) {
+      await deleteUserFavorite(userId, productId)
+      await getFavorites()
+    } else {
+      await setUserFavorite(userId, productId)
+      await getFavorites()
+    }
+  }
+
   useEffect(() => {
     getImage()
   }, [])
 
-
   const formatPrice = (msrp) => [`${msrp}`.slice(0, -2), `${msrp}`.slice(-2)];
-
   return (
     <article className="product">
       {imageLoading ? <BlurhashCanvas hash={blurHash} width='330' height='330' /> : <img src={`data:image/png;base64, ${image}`} alt={slogan} />}
@@ -44,7 +57,7 @@ export default function Product({
         </span>
       </div>
       <p className="product-actions">
-        <button>Add to faves</button>
+        <button onClick={toggleFavorite}>{faved ? 'Unfavorite' : 'Add to faves'}</button>
       </p>
     </article>
   )

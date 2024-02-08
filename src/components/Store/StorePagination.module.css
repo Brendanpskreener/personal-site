@@ -33,6 +33,7 @@
   font-size: 13px;
   min-width: 32px;
   background-color: #FFD814;
+  color: #121314;
 }
 
 .pagination-item:hover:not([disabled]) {

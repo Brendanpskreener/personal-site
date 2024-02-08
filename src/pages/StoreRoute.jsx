@@ -1,5 +1,10 @@
 import Store from "../components/Store/Store";
+import StoreContextProvider from "../store/StoreContext";
 
 export default function StoreRoute() {
-  return <Store />
+  return (
+    <StoreContextProvider>
+      <Store />
+    </StoreContextProvider>
+  )
 }

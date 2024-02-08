@@ -10,13 +10,10 @@ export default function StorePagination(props) {
   function range(start, end) {
     let length = end - start + 1
     const result = Array.from({ length }, (element, index) => index + start)
-    //console.log(result)
     return result
   }
 
   function main() {
-
-    //console.log(totalPageNumbers, totalPageCount)
     if (totalPageNumbers >= totalPageCount) {
       return range(1, totalPageCount)
     }
@@ -26,19 +23,19 @@ export default function StorePagination(props) {
     const shouldShowRightDots = rightSiblingIndex < totalPageCount - 2
     const firstPageIndex = 1
     const lastPageIndex = totalPageCount
-    //console.log(!shouldShowLeftDots, shouldShowRightDots)
+
     if (!shouldShowLeftDots && shouldShowRightDots) {
       let leftItemCount = 3 + 2 * siblingCount
       let leftRange = range(1, leftItemCount)
       return [...leftRange, '...', totalPageCount]
     }
-    //console.log(shouldShowLeftDots, !shouldShowRightDots)
+
     if (shouldShowLeftDots && !shouldShowRightDots) {
       let rightItemCount = 3 + 2 * siblingCount
       let rightRange = range(totalPageCount - rightItemCount + 1, totalPageCount)
       return [firstPageIndex, '...', ...rightRange]
     }
-    //console.log(shouldShowLeftDots, shouldShowRightDots)
+
     if (shouldShowLeftDots && shouldShowRightDots) {
       let middleRange = range(leftSiblingIndex, rightSiblingIndex)
       return [firstPageIndex, '...', ...middleRange, '...', lastPageIndex]
@@ -61,8 +58,6 @@ export default function StorePagination(props) {
       onPageChange(pageNumber)
     }
   }
-
-  //console.log('pagination rendered', main())
 
   const paginationRange = main()
 

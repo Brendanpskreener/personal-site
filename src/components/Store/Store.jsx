@@ -4,7 +4,7 @@ import StorePagination from "./StorePagination";
 import { StoreContext } from "../../store/StoreContext";
 
 export default function Store() {
-  const { productList, filtered, changeFilter, totalPageCount } = useContext(StoreContext)
+  const { productList, filtered, changeFilter, totalPageCount, favoritesList } = useContext(StoreContext)
 
   return (
     <section className="shop">
@@ -16,9 +16,12 @@ export default function Store() {
         </div>
       </div>
       <ul className="products">
-        {productList.length > 0 ? productList.map((product, index) => (
-          <Product key={product.productId} {...product} />
-        )) : <h1 className="title">No Results</h1>}
+        {productList.length > 0 ? productList.map((product, index) => {
+          const faved = favoritesList.includes(product.productId) ? true : false
+          return (
+            <Product key={product.productId} {...product} faved={faved} />
+          )
+        }) : <h1 className="title">No Results</h1>}
       </ul>
       {totalPageCount > 1 && <StorePagination />}
     </section>

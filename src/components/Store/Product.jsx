@@ -13,7 +13,7 @@ export default function Product({
   slogan,
   faved
 }) {
-  const { userId, getFavorites } = useContext(StoreContext)
+  const { userId, getFavorites, userLoggedIn, toggleModal } = useContext(StoreContext)
   const [image, setImage] = useState([])
   const [imageLoading, setImageLoading] = useState(true)
 
@@ -27,6 +27,14 @@ export default function Product({
       setImageLoading(false)
     } catch (error) {
       console.warn(error)
+    }
+  }
+
+  async function checkLoggedIn() {
+    if (userLoggedIn) {
+      toggleFavorite()
+    } else {
+      toggleModal(true)
     }
   }
 
@@ -57,7 +65,7 @@ export default function Product({
         </span>
       </div>
       <p className="product-actions">
-        <button onClick={toggleFavorite}>{faved ? 'Unfavorite' : 'Add to faves'}</button>
+        <button onClick={checkLoggedIn}>{faved ? 'Unfavorite' : 'Add to faves'}</button>
       </p>
     </article>
   )

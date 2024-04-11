@@ -2,8 +2,6 @@ import { createContext, useEffect, useReducer } from "react"
 import findProducts from "../interfaces/FindProducts"
 import findFavorites from "../interfaces/FindFavorites"
 
-const userId = '63d53f91-4ea5-4bc5-92e4-c9191687f11d'
-
 const initialState = {
   productList: [],
   favoritesList: [],
@@ -11,10 +9,13 @@ const initialState = {
   currentPageNumber: 1,
   userPageSize: 10,
   filtered: 0,
-  userId,
-  userLoggedIn: true,
+  userId: "",
+  userLoggedIn: false,
+  modalOpen: false,
+  toggleModal: () => { },
   onPageChange: () => { },
-  changeFilter: () => { }
+  changeFilter: () => { },
+  handleUserLoggedIn: () => { }
 }
 
 export const StoreContext = createContext(initialState)
@@ -33,12 +34,18 @@ function storeReducer(state, { type, payload }) {
   if (type === 'set_favorites_filter') {
     return { ...state, filtered: payload, currentPageNumber: 1 }
   }
+  if (type === 'set_modal_status') {
+    return { ...state, modalOpen: payload }
+  }
+  if (type === 'set_user_logged_in') {
+    return { ...state, userLoggedIn: true, userId: payload }
+  }
   return state
 }
 
 export default function StoreContextProvider({ children }) {
   const [storeState, storeDispatch] = useReducer(storeReducer, initialState)
-  const { productList, pagination, currentPageNumber, userPageSize, filtered, userId, favoritesList, userLoggedIn } = storeState
+  const { productList, pagination, currentPageNumber, userPageSize, filtered, userId, favoritesList, userLoggedIn, modalOpen } = storeState
 
   async function getStore(productIds) {
     try {
@@ -65,9 +72,17 @@ export default function StoreContextProvider({ children }) {
   }
 
   function changeFilter(value) {
-    if (filtered !== value && userLoggedIn) {
+    if (filtered !== value) {
       storeDispatch({ type: 'set_favorites_filter', payload: value })
     }
+  }
+
+  function toggleModal(value) {
+    storeDispatch({ type: 'set_modal_status', payload: value })
+  }
+
+  function handleUserLoggedIn(userId) {
+    storeDispatch({ type: 'set_user_logged_in', payload: userId })
   }
 
   const totalPageCount = Math.ceil(pagination.total / pagination.size)
@@ -76,6 +91,8 @@ export default function StoreContextProvider({ children }) {
     productList,
     favoritesList,
     userId,
+    userLoggedIn,
+    modalOpen,
     pagination,
     currentPageNumber,
     userPageSize,
@@ -83,7 +100,9 @@ export default function StoreContextProvider({ children }) {
     totalPageCount,
     onPageChange,
     changeFilter,
-    getFavorites
+    getFavorites,
+    toggleModal,
+    handleUserLoggedIn
   }
 
   useEffect(() => {
@@ -103,7 +122,7 @@ export default function StoreContextProvider({ children }) {
     if (userLoggedIn) {
       getFavorites()
     }
-  }, [])
+  }, [userLoggedIn])
 
   return (
     <StoreContext.Provider value={storeContext}>

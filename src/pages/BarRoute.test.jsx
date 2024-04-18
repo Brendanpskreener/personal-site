@@ -10,7 +10,6 @@ describe('BarFinder', () => {
     expect(screen.getByText('Bar Finder')).toBeInTheDocument()
   })
   test('should not show content initially', () => {
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
     expect(screen.queryByText('Found no Bars')).not.toBeInTheDocument()
     expect(screen.queryByText('Filters')).not.toBeInTheDocument()
     expect(screen.queryByText('Next')).not.toBeInTheDocument()

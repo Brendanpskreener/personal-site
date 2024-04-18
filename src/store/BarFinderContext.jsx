@@ -5,7 +5,7 @@ const initialState = {
   barlist: [],
   currentLocation: {},
   loading: true,
-  initialSearchLoading: true,
+  searchLoading: true,
   locationUnavailable: true,
   currentPage: 1,
   perPage: 4,
@@ -20,11 +20,14 @@ function barFinderReducer(state, { type, payload, id }) {
   if (type === 'set_bars') {
     let newState
     if (id === 'reset') {
-      newState = { ...state, barlist: payload, currentPage: 1, initialSearchLoading: false }
+      newState = { ...state, barlist: payload, currentPage: 1, searchLoading: false }
     } else {
-      newState = { ...state, barlist: payload, initialSearchLoading: false }
+      newState = { ...state, barlist: payload, searchLoading: false }
     }
     return newState
+  }
+  if (type === 'set_search_loading') {
+    return { ...state, searchLoading: true }
   }
   if (type === 'set_location') {
     return { ...state, currentLocation: payload, locationUnavailable: false }
@@ -43,7 +46,7 @@ function barFinderReducer(state, { type, payload, id }) {
 
 export default function BarFinderContextProvider({ children }) {
   const [barFinderState, barFinderDispatch] = useReducer(barFinderReducer, initialState)
-  const { barlist, currentLocation, loading, locationUnavailable, currentPage, perPage, initialSearchLoading } = barFinderState
+  const { barlist, currentLocation, loading, locationUnavailable, currentPage, perPage, searchLoading } = barFinderState
 
   async function getLocation() {
     const promise = new Promise((resolve, reject) => {
@@ -61,6 +64,7 @@ export default function BarFinderContextProvider({ children }) {
 
   async function handleSearch(query, id) {
     try {
+      barFinderDispatch({ type: 'set_search_loading' })
       const bars = await findBars({ ...query, ...currentLocation, perPage })
       barFinderDispatch({ type: 'set_bars', payload: bars, id })
     } catch (error) {
@@ -82,7 +86,7 @@ export default function BarFinderContextProvider({ children }) {
     barlist,
     currentLocation,
     loading,
-    initialSearchLoading,
+    searchLoading,
     locationUnavailable,
     currentPage,
     perPage,

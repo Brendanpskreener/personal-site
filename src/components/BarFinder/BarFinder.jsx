@@ -7,7 +7,7 @@ import classes from './BarFinder.module.css'
 import { BarFinderContext } from "../../store/BarFinderContext"
 
 export default function BarFinder() {
-  const { loading, initialSearchLoading } = useContext(BarFinderContext)
+  const { loading, searchLoading } = useContext(BarFinderContext)
 
 
   return (
@@ -18,7 +18,7 @@ export default function BarFinder() {
       {loading ? <div className={classes.loading}><LoadingRing /></div> :
         <div className={classes.container}>
           <UserInput />
-          {initialSearchLoading ? <div className={classes.loading}><LoadingRing /></div> : <BarList />}
+          {searchLoading ? <div className={classes.loading}><LoadingRing /></div> : <BarList />}
           <Pagination />
         </div>}
     </>

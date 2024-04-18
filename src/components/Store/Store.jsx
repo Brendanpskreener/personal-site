@@ -4,26 +4,30 @@ import StorePagination from "./StorePagination";
 import { StoreContext } from "../../store/StoreContext";
 
 export default function Store() {
-  const { productList, filtered, changeFilter, totalPageCount, favoritesList } = useContext(StoreContext)
+  const { productList, filtered, changeFilter, totalPageCount, favoritesList, loading } = useContext(StoreContext)
 
   return (
     <section className="shop">
-      <div className="header">
+      {loading ? <h1 className="title"><div className="lds-ring"><div></div><div></div><div></div><div></div></div></h1> : <><div className="header">
         <h1>AI Shop</h1>
         <div>
-          <span className={filtered === 0 ? 'selected' : null} onClick={() => changeFilter(0)}>All Products</span>
-          <span className={filtered === 1 ? 'selected' : null} onClick={() => changeFilter(1)}>Favorites</span>
+          <p className={filtered === 0 ? 'selected' : null}>
+            <span onClick={() => changeFilter(0)}>All Products</span>
+          </p>
+          <p className={filtered === 1 ? 'selected' : null} >
+            <span onClick={() => changeFilter(1)}>Favorites</span>
+          </p>
         </div>
       </div>
-      <ul className="products">
-        {productList.length > 0 ? productList.map((product, index) => {
-          const faved = favoritesList.includes(product.productId) ? true : false
-          return (
-            <Product key={product.productId} {...product} faved={faved} />
-          )
-        }) : <h1 className="title">No Results</h1>}
-      </ul>
-      {totalPageCount > 1 && <StorePagination />}
+        <ul className="products">
+          {productList.length > 0 ? productList.map((product, index) => {
+            const faved = favoritesList.includes(product.productId) ? true : false
+            return (
+              <Product key={product.productId} {...product} faved={faved} />
+            )
+          }) : <h1 className="title">No Results</h1>}
+        </ul>
+        {totalPageCount > 1 && <StorePagination />}</>}
     </section>
   )
 }

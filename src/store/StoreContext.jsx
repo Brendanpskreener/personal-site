@@ -13,6 +13,7 @@ const initialState = {
   filtered: 0,
   userId,
   userLoggedIn: true,
+  loading: true,
   onPageChange: () => { },
   changeFilter: () => { }
 }
@@ -22,7 +23,7 @@ export const StoreContext = createContext(initialState)
 function storeReducer(state, { type, payload }) {
   if (type === 'set_products_list') {
     const { results, pagination } = payload
-    return { ...state, productList: results, pagination }
+    return { ...state, productList: results, pagination, loading: false }
   }
   if (type === 'set_favorites_list') {
     return { ...state, favoritesList: payload }
@@ -38,7 +39,7 @@ function storeReducer(state, { type, payload }) {
 
 export default function StoreContextProvider({ children }) {
   const [storeState, storeDispatch] = useReducer(storeReducer, initialState)
-  const { productList, pagination, currentPageNumber, userPageSize, filtered, userId, favoritesList, userLoggedIn } = storeState
+  const { productList, pagination, currentPageNumber, userPageSize, filtered, userId, favoritesList, userLoggedIn, loading } = storeState
 
   async function getStore(productIds) {
     try {
@@ -81,6 +82,7 @@ export default function StoreContextProvider({ children }) {
     userPageSize,
     filtered,
     totalPageCount,
+    loading,
     onPageChange,
     changeFilter,
     getFavorites

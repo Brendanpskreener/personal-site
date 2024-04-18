@@ -5,6 +5,7 @@ const initialState = {
   barlist: [],
   currentLocation: {},
   loading: true,
+  initialSearchLoading: true,
   locationUnavailable: true,
   currentPage: 1,
   perPage: 4,
@@ -19,9 +20,9 @@ function barFinderReducer(state, { type, payload, id }) {
   if (type === 'set_bars') {
     let newState
     if (id === 'reset') {
-      newState = { ...state, barlist: payload, currentPage: 1 }
+      newState = { ...state, barlist: payload, currentPage: 1, initialSearchLoading: false }
     } else {
-      newState = { ...state, barlist: payload }
+      newState = { ...state, barlist: payload, initialSearchLoading: false }
     }
     return newState
   }
@@ -42,7 +43,7 @@ function barFinderReducer(state, { type, payload, id }) {
 
 export default function BarFinderContextProvider({ children }) {
   const [barFinderState, barFinderDispatch] = useReducer(barFinderReducer, initialState)
-  const { barlist, currentLocation, loading, locationUnavailable, currentPage, perPage } = barFinderState
+  const { barlist, currentLocation, loading, locationUnavailable, currentPage, perPage, initialSearchLoading } = barFinderState
 
   async function getLocation() {
     const promise = new Promise((resolve, reject) => {
@@ -81,6 +82,7 @@ export default function BarFinderContextProvider({ children }) {
     barlist,
     currentLocation,
     loading,
+    initialSearchLoading,
     locationUnavailable,
     currentPage,
     perPage,

@@ -2,13 +2,14 @@ import { useContext } from "react";
 import Product from "./Product";
 import StorePagination from "./StorePagination";
 import { StoreContext } from "../../store/StoreContext";
+import LoadingRing from "../UI/LoadingRing";
 
 export default function Store() {
   const { productList, filtered, changeFilter, totalPageCount, favoritesList, loading } = useContext(StoreContext)
 
   return (
     <section className="shop">
-      {loading ? <h1 className="title"><div className="lds-ring"><div></div><div></div><div></div><div></div></div></h1> : <><div className="header">
+      {loading ? <h1 className="title"><LoadingRing /></h1> : <><div className="header">
         <h1>AI Shop</h1>
         <div>
           <p className={filtered === 0 ? 'selected' : null}>

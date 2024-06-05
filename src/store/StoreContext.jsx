@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer } from "react"
-import findProducts from "../interfaces/FindProducts"
-import findFavorites from "../interfaces/FindFavorites"
+import findProducts from "../interfaces/findProducts"
+import findFavorites from "../interfaces/findFavorites"
 
 const userId = '63d53f91-4ea5-4bc5-92e4-c9191687f11d'
 

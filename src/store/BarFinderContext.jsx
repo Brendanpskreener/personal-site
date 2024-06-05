@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer } from "react";
-import findBars from "../interfaces/FindBars";
+import findBars from "../interfaces/findBars";
 
 const initialState = {
   barlist: [],

@@ -32,10 +32,10 @@ export default function Product({
 
   async function toggleFavorite() {
     if (faved) {
-      await deleteUserFavorite(userId, productId)
+      await deleteUserFavorite({ userId, productId })
       await getFavorites()
     } else {
-      await setUserFavorite(userId, productId)
+      await setUserFavorite({ userId, productId })
       await getFavorites()
     }
   }

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer } from "react"
-import findProducts from "../interfaces/FindProducts"
-import findFavorites from "../interfaces/FindFavorites"
+import findProducts from "../interfaces/findProducts"
+import findFavorites from "../interfaces/findFavorites"
 
 const userId = '63d53f91-4ea5-4bc5-92e4-c9191687f11d'
 
@@ -21,20 +21,19 @@ const initialState = {
 export const StoreContext = createContext(initialState)
 
 function storeReducer(state, { type, payload }) {
-  if (type === 'set_products_list') {
-    const { results, pagination } = payload
-    return { ...state, productList: results, pagination, loading: false }
+  switch (type) {
+    case 'set_products_list':
+      const { results, pagination } = payload
+      return { ...state, productList: results, pagination, loading: false }
+    case 'set_favorites_list':
+      return { ...state, favoritesList: payload }
+    case 'set_current_page':
+      return { ...state, currentPageNumber: payload }
+    case 'set_favorites_filter':
+      return { ...state, filtered: payload, currentPageNumber: 1 }
+    default:
+      return state
   }
-  if (type === 'set_favorites_list') {
-    return { ...state, favoritesList: payload }
-  }
-  if (type === 'set_current_page') {
-    return { ...state, currentPageNumber: payload }
-  }
-  if (type === 'set_favorites_filter') {
-    return { ...state, filtered: payload, currentPageNumber: 1 }
-  }
-  return state
 }
 
 export default function StoreContextProvider({ children }) {

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import findImage from '../../interfaces/FindImage'
+import findImage from '../../interfaces/findImage'
 import { BlurhashCanvas } from "react-blurhash";
 import setUserFavorite from "../../interfaces/setUserFavorite";
 import deleteUserFavorite from "../../interfaces/deleteUserFavorite";
@@ -32,10 +32,10 @@ export default function Product({
 
   async function toggleFavorite() {
     if (faved) {
-      await deleteUserFavorite(userId, productId)
+      await deleteUserFavorite({ userId, productId })
       await getFavorites()
     } else {
-      await setUserFavorite(userId, productId)
+      await setUserFavorite({ userId, productId })
       await getFavorites()
     }
   }

@@ -104,7 +104,6 @@ body {
 .header div {
   display: flex;
   align-items: center;
-  gap: 1rem;
 }
 
 .header div span {
@@ -157,6 +156,27 @@ body {
 
 .lds-ring div:nth-child(3) {
   animation-delay: -0.15s;
+}
+
+@media (max-width: 900px) {
+  .shop {
+    width: unset;
+    margin: unset;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .products {
+    gap: unset;
+  }
+
+  .header {
+    padding-left: 2.5rem;
+  }
+
+  .product {
+    justify-self: center;
+  }
 }
 
 @keyframes lds-ring {

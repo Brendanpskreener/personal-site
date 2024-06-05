@@ -17,31 +17,28 @@ const initialState = {
 export const BarFinderContext = createContext(initialState)
 
 function barFinderReducer(state, { type, payload, id }) {
-  if (type === 'set_bars') {
-    let newState
-    if (id === 'reset') {
-      newState = { ...state, barlist: payload, currentPage: 1, searchLoading: false }
-    } else {
-      newState = { ...state, barlist: payload, searchLoading: false }
-    }
-    return newState
+  switch (type) {
+    case 'set_bars':
+      let newState
+      if (id === 'reset') {
+        newState = { ...state, barlist: payload, currentPage: 1, searchLoading: false }
+      } else {
+        newState = { ...state, barlist: payload, searchLoading: false }
+      }
+      return newState
+    case 'set_search_loading':
+      return { ...state, searchLoading: true }
+    case 'set_location':
+      return { ...state, currentLocation: payload, locationUnavailable: false }
+    case 'set_loading':
+      return { ...state, loading: payload }
+    case 'prev_page':
+      return { ...state, currentPage: state.currentPage - 1 }
+    case 'next_page':
+      return { ...state, currentPage: state.currentPage + 1 }
+    default:
+      return state
   }
-  if (type === 'set_search_loading') {
-    return { ...state, searchLoading: true }
-  }
-  if (type === 'set_location') {
-    return { ...state, currentLocation: payload, locationUnavailable: false }
-  }
-  if (type === 'set_loading') {
-    return { ...state, loading: payload }
-  }
-  if (type === 'prev_page') {
-    return { ...state, currentPage: state.currentPage - 1 }
-  }
-  if (type === 'next_page') {
-    return { ...state, currentPage: state.currentPage + 1 }
-  }
-  return state
 }
 
 export default function BarFinderContextProvider({ children }) {

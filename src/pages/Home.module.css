@@ -1,12 +1,11 @@
-.card {
+.home {
   display: flex;
   align-items: center;
   flex-direction: column;
   padding: 2em;
-  margin-top: 20rem;
 }
 
-.card p {
+.home p {
   font-size: large;
   font-weight: 400;
   font: bold;
@@ -14,7 +13,52 @@
   margin: 0;
 }
 
-.card span {
+.home span {
   font-size: larger;
   color: rgb(5 122 240);
+}
+
+.projects {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1rem;
+}
+
+.card {
+  gap: 4rem;
+  display: flex;
+  flex-direction: row;
+  border: solid;
+  border-width: 2px;
+  border-color: white;
+  border-radius: .5rem;
+}
+
+.card img {
+  width: 50%;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 1rem;
+}
+
+.description header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.description img {
+  width: 2.25rem;
 }

@@ -8,7 +8,6 @@
 .home p {
   font-size: large;
   font-weight: 400;
-  font: bold;
   max-width: 540px;
   margin: 0;
 }
@@ -34,11 +33,9 @@
 }
 
 .card {
-  gap: 4rem;
   display: flex;
   flex-direction: row;
   border: solid;
-  border-width: 2px;
   border-color: white;
   border-radius: .5rem;
 }
@@ -61,4 +58,24 @@
 
 .description img {
   width: 2.25rem;
+}
+
+@media (max-width: 900px) {
+  .projects {
+    padding-left: unset;
+    padding-right: unset;
+  }
+
+  .content {
+    padding: unset;
+  }
+
+  .card {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .description {
+    width: unset;
+  }
 }

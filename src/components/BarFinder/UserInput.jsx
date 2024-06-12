@@ -9,7 +9,7 @@ export default function UserInput() {
   const [formData, setFormData] = useState(defaultState)
   const [timer, setTimer] = useState(null)
   const [formIsValid, setFormIsValid] = useState(false)
-
+  //the timer must expire to set formIsValid to true, which will trigger handleSearch
   function autoSearch() {
     clearTimeout(timer)
     const newTimer = setTimeout(() => {

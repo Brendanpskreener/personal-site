@@ -8,8 +8,8 @@ import { BarFinderContext } from "../../store/BarFinderContext"
 
 export default function BarFinder() {
   const { loading, searchLoading } = useContext(BarFinderContext)
-
-
+  //loading determines whether or not the child components render
+  //searchLoading only blocks the barList component specifically
   return (
     <>
       <h1 className={classes.title}>

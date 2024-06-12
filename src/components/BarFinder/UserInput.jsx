@@ -9,7 +9,7 @@ export default function UserInput() {
   const [formData, setFormData] = useState(defaultState)
   const [timer, setTimer] = useState(null)
   const [formIsValid, setFormIsValid] = useState(false)
-
+  //the timer must expire to set formIsValid to true, which will trigger handleSearch
   function autoSearch() {
     clearTimeout(timer)
     const newTimer = setTimeout(() => {
@@ -40,7 +40,7 @@ export default function UserInput() {
     setFormData(prevFormData => ({ ...prevFormData, locationToggle: checked, zipcode: '' }))
     autoSearch()
   }
-
+  //from comment above, this will not run initially. Only after form is set to valid when user lets timer expire
   useEffect(() => {
     if (formIsValid) {
       handleSearch({ ...formData, page: 1 }, 'reset')

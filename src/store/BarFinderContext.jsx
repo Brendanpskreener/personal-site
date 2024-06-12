@@ -44,7 +44,8 @@ function barFinderReducer(state, { type, payload, id }) {
 export default function BarFinderContextProvider({ children }) {
   const [barFinderState, barFinderDispatch] = useReducer(barFinderReducer, initialState)
   const { barlist, currentLocation, loading, locationUnavailable, currentPage, perPage, searchLoading } = barFinderState
-
+  //getLocation only gets called after the barContextProvider has rendered (once the user has navigated to the bar finder route)
+  //since the initial search via API depends upon a location, loading state is set to true until the promise is resolved (a selection is made regarding enabling location permissions)
   async function getLocation() {
     const promise = new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject)
@@ -58,7 +59,7 @@ export default function BarFinderContextProvider({ children }) {
       barFinderDispatch({ type: 'set_loading', payload: false })
     }
   }
-
+  //search loading state is set to true (showing a loading spinner) until set_bars is dispatched
   async function handleSearch(query, id) {
     try {
       barFinderDispatch({ type: 'set_search_loading' })

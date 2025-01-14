@@ -15,7 +15,7 @@ export default function Home() {
               name='AI Store'
               url='https://github.com/Brendanpskreener/personal-site/tree/main/src/components/Store'
               img={storeImg}
-              description='Developed my own REST API using DynamoDB, AWS Lambda, Node, and OpenSearch (Elastic Search) to create a store page populated with AI generated products.'
+              description='Developed my own REST API using BlurHash, Pagination, optional chaining, CI/CD, Github Actions, Serverless, DynamoDB, AWS Lambda, S3, and OpenSearch (Elastic Search) to create a store page populated with AI generated products.'
             />
             <Projects
               name='Bar Finder'

@@ -13,9 +13,11 @@ export default function Home() {
           <div className={classes["content"]}>
             <Projects
               name='AI Store'
-              url='https://github.com/Brendanpskreener/personal-site/tree/main/src/components/Store'
+              url='https://github.com/Brendanpskreener/fake-store'
+              url2='https://github.com/Brendanpskreener/personal-site/tree/main/src/components/Store'
               img={storeImg}
               description='Developed my own REST API using BlurHash, Pagination, optional chaining, CI/CD, Github Actions, Serverless, DynamoDB, AWS Lambda, S3, and OpenSearch (Elastic Search) to create a store page populated with AI generated products.'
+              futurePlans='Future State: Add user auth + event pipeline'
             />
             <Projects
               name='Bar Finder'

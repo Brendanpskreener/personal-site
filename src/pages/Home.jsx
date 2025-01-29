@@ -13,6 +13,7 @@ export default function Home() {
           <div className={classes["content"]}>
             <Projects
               name='AI Store'
+              nav='/store'
               url='https://github.com/Brendanpskreener/fake-store'
               url2='https://github.com/Brendanpskreener/personal-site/tree/main/src/components/Store'
               img={storeImg}
@@ -21,6 +22,7 @@ export default function Home() {
             />
             <Projects
               name='Bar Finder'
+              nav='/barfinder'
               url='https://github.com/Brendanpskreener/personal-site/tree/main/src/components/BarFinder'
               img={barFinderImg}
               description='Developed a React app hitting OpenBrewery API with React Hooks, Redux/Context management, Paginated results, CSS animations & transitions, async await, two-way binding, conditional content, etc'

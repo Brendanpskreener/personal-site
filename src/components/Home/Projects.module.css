@@ -6,8 +6,12 @@
   border-radius: .5rem;
 }
 
-.card img {
+.card a {
   width: 50%;
+}
+
+.imagelink {
+  width: 100%;
 }
 
 .description {
@@ -26,10 +30,19 @@
   width: 2.25rem;
 }
 
+.link a {
+  color: inherit;
+  text-decoration: none;
+}
+
 @media (max-width: 900px) {
   .card {
     flex-direction: column;
     align-items: center;
+  }
+
+  .card a {
+    width: 75%;
   }
 
   .description {

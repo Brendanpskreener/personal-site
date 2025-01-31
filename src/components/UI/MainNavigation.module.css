@@ -8,6 +8,7 @@
   transition: all 0.3s ease-in;
   overflow: hidden;
   white-space: nowrap;
+  z-index: 7;
 }
 
 .list a {
@@ -54,6 +55,7 @@
   transition: all 0.3s ease-in;
   overflow: hidden;
   white-space: nowrap;
+  z-index: 7;
 }
 
 .open a {

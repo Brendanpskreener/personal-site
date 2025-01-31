@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react"
-import findImage from '../../interfaces/findImage'
+import { useContext, useState } from "react"
 import { BlurhashCanvas } from "react-blurhash";
 import setUserFavorite from "../../interfaces/setUserFavorite";
 import deleteUserFavorite from "../../interfaces/deleteUserFavorite";
@@ -14,21 +13,7 @@ export default function Product({
   faved
 }) {
   const { userId, getFavorites } = useContext(StoreContext)
-  const [image, setImage] = useState([])
-  const [imageLoading, setImageLoading] = useState(true)
-
-  async function getImage() {
-    try {
-      const image = await findImage(productId)
-      const uintBuf = new Uint8Array(image);
-      const uintStrBuf = uintBuf.reduce((acc, bytes) => (`${acc}${String.fromCharCode(bytes)}`), '');
-      const base64String = btoa(uintStrBuf);
-      setImage(base64String)
-      setImageLoading(false)
-    } catch (error) {
-      console.warn(error)
-    }
-  }
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   async function toggleFavorite() {
     if (faved) {
@@ -40,14 +25,29 @@ export default function Product({
     }
   }
 
-  useEffect(() => {
-    getImage()
-  }, [])
-
   const formatPrice = (msrp) => [`${msrp}`.slice(0, -2), `${msrp}`.slice(-2)];
   return (
-    <article className="product">
-      {imageLoading ? <BlurhashCanvas hash={blurHash} width='330' height='330' /> : <img src={`data:image/png;base64, ${image}`} alt={slogan} />}
+    <article className="product" style={{ position: 'relative' }}>
+      <BlurhashCanvas
+        hash={blurHash}
+        width='330'
+        height='330'
+        style={{
+          transition: 'opacity 0.5s ease',
+          opacity: imageLoaded ? 0 : 1
+        }} />
+      <img
+        src={`https://xkw4oz08el.execute-api.us-west-2.amazonaws.com/product/${productId}/image`}
+        alt={slogan}
+        onLoad={() => setImageLoaded(true)}
+        loading="lazy"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          transition: 'opacity 0.5s ease',
+          opacity: imageLoaded ? 1 : 0
+        }} />
       <div className="product-content">
         <h3>{name}</h3>
         <span className="product-price">

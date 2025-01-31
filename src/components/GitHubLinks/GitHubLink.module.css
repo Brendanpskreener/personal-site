@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.anchor {
+  display: flex;
+  margin: 2px;
+}
+
+.caption {
+  color: white;
+  text-decoration: none;
+}

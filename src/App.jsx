@@ -4,6 +4,7 @@ import Error from './pages/Error'
 import Home from './pages/Home'
 import BarRoute from './pages/BarRoute'
 import StoreRoute from './pages/StoreRoute'
+import { SkeletonTheme } from 'react-loading-skeleton'
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,9 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <SkeletonTheme baseColor='#313131' highlightColor='#525252'>
+        <RouterProvider router={router} />
+      </SkeletonTheme>
     </>
   )
 }

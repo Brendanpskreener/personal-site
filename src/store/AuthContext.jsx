@@ -35,8 +35,6 @@ export default function AuthContextProvider({ children }) {
   const { token, loading, userId, email } = authState
 
   function redirectToLogin() {
-    console.log('🔍 Debug - redirectUri:', cognitoConfig.redirectUri)
-    console.log('🔍 Debug - window.location.origin:', window.location.origin)
     const params = new URLSearchParams({
       client_id: cognitoConfig.clientId,
       response_type: 'code',
@@ -45,7 +43,6 @@ export default function AuthContextProvider({ children }) {
     })
 
     const url = `${cognitoConfig.domain}/login?${params.toString()}`
-    console.log('🔍 Debug - Full OAuth URL:', url)
     window.location.href = url
   }
 

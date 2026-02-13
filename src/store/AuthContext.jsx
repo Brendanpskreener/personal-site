@@ -1,6 +1,7 @@
 import { createContext, useEffect, useReducer } from "react"
 import { cognitoConfig } from "../config/cognito"
 import decodeJWT from '../utils/decodeJWT'
+import isTokenExpired from '../utils/isTokenExpired'
 
 const initialState = {
   token: null,
@@ -89,6 +90,58 @@ export default function AuthContextProvider({ children }) {
     authDispatch({ type: 'set_token', payload: accessToken })
   }
 
+  async function refreshAccessToken() {
+    const refreshToken = localStorage.getItem('refreshToken')
+    if (!refreshToken) {
+      throw new Error('No refresh token available')
+    }
+
+    const params = new URLSearchParams({
+      grant_type: 'refresh_token',
+      client_id: cognitoConfig.clientId,
+      refresh_token: refreshToken
+    })
+
+    try {
+      const response = await fetch(`${cognitoConfig.domain}/oauth2/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: params.toString()
+      })
+
+      if (!response.ok) {
+        throw new Error('Token refresh failed')
+      }
+
+      const data = await response.json()
+      // Refresh returns new access_token and id_token, but NOT a new refresh_token
+      setTokens(data.access_token, refreshToken, data.id_token)
+      return data.access_token
+    } catch (error) {
+      console.error('Token refresh failed:', error)
+      // Refresh failed - log user out
+      logout()
+      throw error
+    }
+  }
+
+  async function getValidToken() {
+    const localToken = localStorage.getItem('accessToken')
+    if (isTokenExpired(localToken)) {
+      // Token expired, refresh it
+      return await refreshAccessToken()
+    }
+
+    if (localToken !== token) {
+      authDispatch({ type: 'set_token', payload: localToken })
+    }
+
+    // Token still valid
+    return localToken
+  }
+
   function logout() {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
@@ -104,7 +157,8 @@ export default function AuthContextProvider({ children }) {
     loading,
     setTokens,
     logout,
-    redirectToLogin
+    redirectToLogin,
+    getValidToken
   }
 
   useEffect(() => {

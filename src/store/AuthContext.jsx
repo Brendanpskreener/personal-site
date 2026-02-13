@@ -1,8 +1,11 @@
 import { createContext, useEffect, useReducer } from "react"
 import { cognitoConfig } from "../config/cognito"
+import decodeJWT from '../utils/decodeJWT'
 
 const initialState = {
   token: null,
+  userId: null,
+  email: null,
   loading: true,
   setTokens: () => { },
   logout: () => { },
@@ -15,6 +18,8 @@ function authReducer(state, { type, payload }) {
   switch (type) {
     case 'set_token':
       return { ...state, token: payload }
+    case 'set_user_info':
+      return { ...state, userId: payload.userId, email: payload.email }
     case 'clear_token':
       return { ...state, token: null }
     case 'set_loading':
@@ -26,7 +31,7 @@ function authReducer(state, { type, payload }) {
 
 export default function AuthContextProvider({ children }) {
   const [authState, authDispatch] = useReducer(authReducer, initialState)
-  const { token, loading } = authState
+  const { token, loading, userId, email } = authState
 
   function redirectToLogin() {
     const params = new URLSearchParams({
@@ -65,20 +70,37 @@ export default function AuthContextProvider({ children }) {
     }
   }
 
-  function setTokens(accessToken, refreshToken) {
+  function setTokens(accessToken, refreshToken, idToken) {
     localStorage.setItem('accessToken', accessToken)
     localStorage.setItem('refreshToken', refreshToken)
+    localStorage.setItem('idToken', idToken)
+
+    //Decode ID token to get user info
+    const userInfo = decodeJWT(idToken)
+    if (userInfo) {
+      authDispatch({
+        type: 'set_user_info', payload: {
+          userId: userInfo.sub,
+          email: userInfo.email
+        }
+      })
+    }
+
     authDispatch({ type: 'set_token', payload: accessToken })
   }
 
   function logout() {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    localStorage.removeItem('idToken')
     authDispatch({ type: 'clear_token' })
+    authDispatch({ type: 'set_user_info', payload: { userId: null, email: null } })
   }
 
   const authContext = {
     token,
+    userId,
+    email,
     loading,
     setTokens,
     logout,
@@ -94,7 +116,7 @@ export default function AuthContextProvider({ children }) {
         // OAuth callback flow
         try {
           const tokens = await exchangeCodeForTokens(code)
-          setTokens(tokens.access_token, tokens.refresh_token)
+          setTokens(tokens.access_token, tokens.refresh_token, tokens.id_token)
 
           // Clean up URL (remove ?code=...)
           window.history.replaceState({}, document.title, window.location.pathname)
@@ -104,6 +126,20 @@ export default function AuthContextProvider({ children }) {
       } else {
         // Normal page load - check localStorage
         const storedToken = localStorage.getItem('accessToken')
+        const storedIdToken = localStorage.getItem('idToken')
+        //Decode ID token if it exists
+        if (storedIdToken) {
+          const userInfo = decodeJWT(storedIdToken)
+          if (userInfo) {
+            authDispatch({
+              type: 'set_user_info', payload: {
+                userId: userInfo.sub,
+                email: userInfo.email
+              }
+            })
+          }
+        }
+
         if (storedToken) {
           authDispatch({ type: 'set_token', payload: storedToken })
         }

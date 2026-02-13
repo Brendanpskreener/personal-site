@@ -14,16 +14,23 @@ export default function Product({
   faved
 }) {
   const { userId, getFavorites } = useContext(StoreContext)
-  const { token } = useContext(AuthContext)
+  const { getValidToken } = useContext(AuthContext)
   const [imageLoaded, setImageLoaded] = useState(false)
 
   async function toggleFavorite() {
-    if (faved) {
-      await deleteUserFavorite({ userId, productId, token })
-      await getFavorites()
-    } else {
-      await setUserFavorite({ userId, productId, token })
-      await getFavorites()
+    try {
+      const token = await getValidToken()
+      if (!token) return
+
+      if (faved) {
+        await deleteUserFavorite({ userId, productId, token })
+        await getFavorites()
+      } else {
+        await setUserFavorite({ userId, productId, token })
+        await getFavorites()
+      }
+    } catch (error) {
+      console.warn('Toggle favorite failed', error)
     }
   }
 

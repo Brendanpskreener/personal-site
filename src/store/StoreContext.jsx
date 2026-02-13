@@ -35,7 +35,7 @@ function storeReducer(state, { type, payload }) {
 
 export default function StoreContextProvider({ children }) {
   const [storeState, storeDispatch] = useReducer(storeReducer, initialState)
-  const { token, userId } = useContext(AuthContext)
+  const { token, userId, getValidToken } = useContext(AuthContext)
   const { productList, pagination, currentPageNumber, userPageSize, filtered, favoritesList, loading } = storeState
 
   async function getStore(productIds) {
@@ -48,10 +48,10 @@ export default function StoreContextProvider({ children }) {
   }
 
   async function getFavorites() {
-    if (!token) return //Dont call if not logged in
-
     try {
-      const favorites = await findFavorites(userId, token)
+      const validToken = await getValidToken()
+      if (!validToken) return //Dont call if not logged in
+      const favorites = await findFavorites(userId, validToken)
       storeDispatch({ type: 'set_favorites_list', payload: favorites })
     } catch (error) {
       console.warn(error)

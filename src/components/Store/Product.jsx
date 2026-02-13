@@ -3,6 +3,7 @@ import { BlurhashCanvas } from "react-blurhash";
 import setUserFavorite from "../../interfaces/setUserFavorite";
 import deleteUserFavorite from "../../interfaces/deleteUserFavorite";
 import { StoreContext } from "../../store/StoreContext";
+import { AuthContext } from "../../store/AuthContext";
 
 export default function Product({
   name,
@@ -13,14 +14,15 @@ export default function Product({
   faved
 }) {
   const { userId, getFavorites } = useContext(StoreContext)
+  const { token } = useContext(AuthContext)
   const [imageLoaded, setImageLoaded] = useState(false)
 
   async function toggleFavorite() {
     if (faved) {
-      await deleteUserFavorite({ userId, productId })
+      await deleteUserFavorite({ userId, productId, token })
       await getFavorites()
     } else {
-      await setUserFavorite({ userId, productId })
+      await setUserFavorite({ userId, productId, token })
       await getFavorites()
     }
   }

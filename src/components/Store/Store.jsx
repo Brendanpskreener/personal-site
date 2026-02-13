@@ -36,7 +36,7 @@ export default function Store() {
         <ul className="products">
           {loading ? placeholder.map((element, index) => {
             return (
-              <Skeleton height={445} />
+              <Skeleton height={445} key={index} />
             )
           }) : context}
         </ul>

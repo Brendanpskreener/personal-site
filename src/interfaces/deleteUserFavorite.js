@@ -1,6 +1,6 @@
-import axios from "axios";
+import apiWithAuth from "../utils/apiWithAuth"
 
-export default async function deleteUserFavorite({ userId, productId }) {
+export default async function deleteUserFavorite({ userId, productId, token }) {
   const baseURL = new URL(`https://xkw4oz08el.execute-api.us-west-2.amazonaws.com/user/${userId}/favorite`)
   const config = {
     method: 'delete',
@@ -11,7 +11,7 @@ export default async function deleteUserFavorite({ userId, productId }) {
     }
   }
   try {
-    const response = await axios(config)
+    const response = await apiWithAuth(config, token)
     console.log(response)
   } catch (error) {
     console.error(error)

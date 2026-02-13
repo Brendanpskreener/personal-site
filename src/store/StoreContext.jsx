@@ -1,8 +1,7 @@
-import { createContext, useEffect, useReducer } from "react"
+import { createContext, useContext, useEffect, useReducer } from "react"
 import findProducts from "../interfaces/findProducts"
 import findFavorites from "../interfaces/findFavorites"
-
-const userId = '63d53f91-4ea5-4bc5-92e4-c9191687f11d'
+import { AuthContext } from './AuthContext'
 
 const initialState = {
   productList: [],
@@ -11,8 +10,6 @@ const initialState = {
   currentPageNumber: 1,
   userPageSize: 10,
   filtered: 0,
-  userId,
-  userLoggedIn: true,
   loading: true,
   onPageChange: () => { },
   changeFilter: () => { }
@@ -38,7 +35,8 @@ function storeReducer(state, { type, payload }) {
 
 export default function StoreContextProvider({ children }) {
   const [storeState, storeDispatch] = useReducer(storeReducer, initialState)
-  const { productList, pagination, currentPageNumber, userPageSize, filtered, userId, favoritesList, userLoggedIn, loading } = storeState
+  const { token, userId } = useContext(AuthContext)
+  const { productList, pagination, currentPageNumber, userPageSize, filtered, favoritesList, loading } = storeState
 
   async function getStore(productIds) {
     try {
@@ -50,8 +48,10 @@ export default function StoreContextProvider({ children }) {
   }
 
   async function getFavorites() {
+    if (!token) return //Dont call if not logged in
+
     try {
-      const favorites = await findFavorites(userId)
+      const favorites = await findFavorites(userId, token)
       storeDispatch({ type: 'set_favorites_list', payload: favorites })
     } catch (error) {
       console.warn(error)
@@ -65,7 +65,7 @@ export default function StoreContextProvider({ children }) {
   }
 
   function changeFilter(value) {
-    if (filtered !== value && userLoggedIn) {
+    if (filtered !== value && token) {
       storeDispatch({ type: 'set_favorites_filter', payload: value })
     }
   }
@@ -101,7 +101,7 @@ export default function StoreContextProvider({ children }) {
   }, [currentPageNumber, userPageSize, filtered, favoritesList])
 
   useEffect(() => {
-    if (userLoggedIn) {
+    if (token) {
       getFavorites()
     }
   }, [])

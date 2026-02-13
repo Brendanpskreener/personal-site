@@ -1,9 +1,12 @@
 import { NavLink } from 'react-router-dom'
 import classes from './MainNavigation.module.css'
 import { useState } from 'react'
+import { useContext } from 'react'
+import { AuthContext } from '../../store/AuthContext'
 
 export default function MainNavigation() {
   const [isOpen, setIsOpen] = useState(false)
+  const { token, loading, redirectToLogin, logout } = useContext(AuthContext)
   function toggleMenu() {
     setIsOpen((prevState) => !prevState)
   }
@@ -40,6 +43,13 @@ export default function MainNavigation() {
         >
           Store
         </NavLink>
+        {loading ? (
+          <a>•••</a>
+        ) : token ? (
+          <a onClick={() => { logout(); closeMenu(); }}>Logout</a>
+        ) : (
+          <a onClick={() => { redirectToLogin(); closeMenu(); }}>Login</a>
+        )}
       </div>
     </>
 

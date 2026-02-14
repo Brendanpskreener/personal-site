@@ -1,18 +1,46 @@
 import { NavLink } from 'react-router-dom'
 import classes from './MainNavigation.module.css'
-import { useState } from 'react'
-import { useContext } from 'react'
+import { useState, useCallback, useContext, memo } from 'react'
 import { AuthContext } from '../../store/AuthContext'
+
+const NavigationLinks = memo(({ getNavLinkClassName, closeMenu }) => (
+  <>
+    <NavLink
+      to='/'
+      className={getNavLinkClassName}
+      onClick={closeMenu}
+      end>
+      Home
+    </NavLink>
+    <NavLink
+      to='/barfinder'
+      className={getNavLinkClassName}
+      onClick={closeMenu}
+    >
+      Bar Finder
+    </NavLink>
+    <NavLink
+      to='store'
+      className={getNavLinkClassName}
+      onClick={closeMenu}
+    >
+      Store
+    </NavLink>
+  </>
+))
 
 export default function MainNavigation() {
   const [isOpen, setIsOpen] = useState(false)
   const { token, loading, redirectToLogin, logout } = useContext(AuthContext)
-  function toggleMenu() {
+  const toggleMenu = useCallback(() => {
     setIsOpen((prevState) => !prevState)
-  }
-  function closeMenu() {
+  }, [])
+  const closeMenu = useCallback(() => {
     setIsOpen(false)
-  }
+  }, [])
+  const getNavLinkClassName = useCallback(({ isActive }) =>
+    isActive ? classes.active : undefined
+    , [])
 
   return (
     <>
@@ -22,27 +50,10 @@ export default function MainNavigation() {
         <span className={classes.burger}></span>
       </div>
       <div className={isOpen ? classes.open : classes.list}>
-        <NavLink
-          to='/'
-          className={({ isActive }) => isActive ? classes.active : undefined}
-          onClick={closeMenu}
-          end>
-          Home
-        </NavLink>
-        <NavLink
-          to='/barfinder'
-          className={({ isActive }) => isActive ? classes.active : undefined}
-          onClick={closeMenu}
-        >
-          Bar Finder
-        </NavLink>
-        <NavLink
-          to='store'
-          className={({ isActive }) => isActive ? classes.active : undefined}
-          onClick={closeMenu}
-        >
-          Store
-        </NavLink>
+        <NavigationLinks
+          getNavLinkClassName={getNavLinkClassName}
+          closeMenu={closeMenu}
+        />
         {loading ? (
           <a>•••</a>
         ) : token ? (

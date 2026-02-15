@@ -39,7 +39,7 @@ export default function AuthContextProvider({ children }) {
       client_id: cognitoConfig.clientId,
       response_type: 'code',
       scope: 'openid email aws.cognito.signin.user.admin',
-      redirect_uri: cognitoConfig.redirectUri
+      redirect_uri: `${window.location.origin}${window.location.pathname}`  // Redirect back to current page
     })
 
     const url = `${cognitoConfig.domain}/login?${params.toString()}`
@@ -51,7 +51,7 @@ export default function AuthContextProvider({ children }) {
       grant_type: 'authorization_code',
       client_id: cognitoConfig.clientId,
       code: code,
-      redirect_uri: cognitoConfig.redirectUri
+      redirect_uri: `${window.location.origin}${window.location.pathname}`  // Must match the redirectUri used in login
     })
 
     try {

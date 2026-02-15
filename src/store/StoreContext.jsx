@@ -91,7 +91,7 @@ export default function StoreContextProvider({ children }) {
     if (filtered === 0) {
       getStore()
     }
-  }, [currentPageNumber, userPageSize, filtered, getStore])
+  }, [filtered, getStore])
 
   useEffect(() => {
     if (filtered === 1) {

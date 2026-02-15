@@ -14,23 +14,36 @@ export default function Product({
   faved
 }) {
   const { userId, getFavorites } = useContext(StoreContext)
-  const { getValidToken } = useContext(AuthContext)
+  const { getValidToken, redirectToLogin, token } = useContext(AuthContext)
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [isTogglingFavorite, setIsTogglingFavorite] = useState(false)
 
   async function toggleFavorite() {
+    // If not logged in, redirect to login
+    if (!token) {
+      redirectToLogin()
+      return
+    }
+
+    // Prevent multiple clicks while request is in progress
+    if (isTogglingFavorite) return
+
     try {
-      const token = await getValidToken()
-      if (!token) return
+      setIsTogglingFavorite(true)
+      const validToken = await getValidToken()
+      if (!validToken) return
 
       if (faved) {
-        await deleteUserFavorite({ userId, productId, token })
+        await deleteUserFavorite({ userId, productId, token: validToken })
         await getFavorites()
       } else {
-        await setUserFavorite({ userId, productId, token })
+        await setUserFavorite({ userId, productId, token: validToken })
         await getFavorites()
       }
     } catch (error) {
       console.warn('Toggle favorite failed', error)
+    } finally {
+      setIsTogglingFavorite(false)
     }
   }
 
@@ -66,7 +79,9 @@ export default function Product({
         </span>
       </div>
       <p className="product-actions">
-        <button onClick={toggleFavorite}>{faved ? 'Unfavorite' : 'Add to faves'}</button>
+        <button onClick={toggleFavorite} disabled={isTogglingFavorite}>
+          {isTogglingFavorite ? '...' : (faved ? 'Unfavorite' : 'Add to faves')}
+        </button>
       </p>
     </article>
   )

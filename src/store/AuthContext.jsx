@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react"
+import { createContext, useEffect, useReducer, useCallback, useMemo } from "react"
 import { cognitoConfig } from "../config/cognito"
 import decodeJWT from '../utils/decodeJWT'
 import isTokenExpired from '../utils/isTokenExpired'
@@ -34,7 +34,7 @@ export default function AuthContextProvider({ children }) {
   const [authState, authDispatch] = useReducer(authReducer, initialState)
   const { token, loading, userId, email } = authState
 
-  function redirectToLogin() {
+  const redirectToLogin = useCallback(() => {
     const params = new URLSearchParams({
       client_id: cognitoConfig.clientId,
       response_type: 'code',
@@ -44,9 +44,9 @@ export default function AuthContextProvider({ children }) {
 
     const url = `${cognitoConfig.domain}/login?${params.toString()}`
     window.location.href = url
-  }
+  }, [])
 
-  async function exchangeCodeForTokens(code) {
+  const exchangeCodeForTokens = useCallback(async (code) => {
     const params = new URLSearchParams({
       grant_type: 'authorization_code',
       client_id: cognitoConfig.clientId,
@@ -69,9 +69,9 @@ export default function AuthContextProvider({ children }) {
       console.error('Token exchange failed:', error)
       throw error
     }
-  }
+  }, [])
 
-  function setTokens(accessToken, refreshToken, idToken) {
+  const setTokens = useCallback((accessToken, refreshToken, idToken) => {
     localStorage.setItem('accessToken', accessToken)
     localStorage.setItem('refreshToken', refreshToken)
     localStorage.setItem('idToken', idToken)
@@ -88,9 +88,17 @@ export default function AuthContextProvider({ children }) {
     }
 
     authDispatch({ type: 'set_token', payload: accessToken })
-  }
+  }, [])
 
-  async function refreshAccessToken() {
+  const logout = useCallback(() => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('idToken')
+    authDispatch({ type: 'clear_token' })
+    authDispatch({ type: 'set_user_info', payload: { userId: null, email: null } })
+  }, [])
+
+  const refreshAccessToken = useCallback(async () => {
     const refreshToken = localStorage.getItem('refreshToken')
     if (!refreshToken) {
       throw new Error('No refresh token available')
@@ -125,9 +133,9 @@ export default function AuthContextProvider({ children }) {
       logout()
       throw error
     }
-  }
+  }, [setTokens, logout])
 
-  async function getValidToken() {
+  const getValidToken = useCallback(async () => {
     const localToken = localStorage.getItem('accessToken')
     if (isTokenExpired(localToken)) {
       // Token expired, refresh it
@@ -140,17 +148,9 @@ export default function AuthContextProvider({ children }) {
 
     // Token still valid
     return localToken
-  }
+  }, [token, refreshAccessToken])
 
-  function logout() {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    localStorage.removeItem('idToken')
-    authDispatch({ type: 'clear_token' })
-    authDispatch({ type: 'set_user_info', payload: { userId: null, email: null } })
-  }
-
-  const authContext = {
+  const authContext = useMemo(() => ({
     token,
     userId,
     email,
@@ -159,7 +159,7 @@ export default function AuthContextProvider({ children }) {
     logout,
     redirectToLogin,
     getValidToken
-  }
+  }), [token, userId, email, loading, setTokens, logout, redirectToLogin, getValidToken])
 
   useEffect(() => {
     async function handleAuth() {

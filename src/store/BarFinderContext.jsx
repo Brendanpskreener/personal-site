@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useCallback, useMemo } from "react";
 import findBars from "../interfaces/findBars";
 
 const initialState = {
@@ -46,7 +46,7 @@ export default function BarFinderContextProvider({ children }) {
   const { barlist, currentLocation, loading, locationUnavailable, currentPage, perPage, searchLoading } = barFinderState
   //getLocation only gets called after the barContextProvider has rendered (once the user has navigated to the bar finder route)
   //since the initial search via API depends upon a location, loading state is set to true until the promise is resolved (a selection is made regarding enabling location permissions)
-  async function getLocation() {
+  const getLocation = useCallback(async () => {
     const promise = new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject)
     })
@@ -57,9 +57,9 @@ export default function BarFinderContextProvider({ children }) {
       console.warn(error)
       barFinderDispatch({ type: 'set_loading', payload: false })
     }
-  }
+  }, [])
   //search loading state is set to true (showing a loading spinner) until set_bars is dispatched
-  async function handleSearch(query, id) {
+  const handleSearch = useCallback(async (query, id) => {
     try {
       barFinderDispatch({ type: 'set_search_loading' })
       const bars = await findBars({ ...query, ...currentLocation, perPage })
@@ -67,19 +67,19 @@ export default function BarFinderContextProvider({ children }) {
     } catch (error) {
       console.warn(error)
     }
-  }
+  }, [currentLocation, perPage])
 
-  function previousPage() {
+  const previousPage = useCallback(() => {
     if (currentPage !== 1) {
       barFinderDispatch({ type: 'prev_page' })
     }
-  }
+  }, [currentPage])
 
-  function nextPage() {
+  const nextPage = useCallback(() => {
     barFinderDispatch({ type: 'next_page' })
-  }
+  }, [])
 
-  const barFinderContext = {
+  const barFinderContext = useMemo(() => ({
     barlist,
     currentLocation,
     loading,
@@ -90,7 +90,7 @@ export default function BarFinderContextProvider({ children }) {
     handleSearch,
     previousPage,
     nextPage,
-  }
+  }), [barlist, currentLocation, loading, searchLoading, locationUnavailable, currentPage, perPage, handleSearch, previousPage, nextPage])
 
   useEffect(() => {
     getLocation()

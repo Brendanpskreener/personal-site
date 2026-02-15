@@ -29,7 +29,7 @@ function barFinderReducer(state, { type, payload, id }) {
     case 'set_search_loading':
       return { ...state, searchLoading: true }
     case 'set_location':
-      return { ...state, currentLocation: payload, locationUnavailable: false }
+      return { ...state, currentLocation: payload, locationUnavailable: false, loading: false }
     case 'set_loading':
       return { ...state, loading: payload }
     case 'prev_page':
@@ -55,7 +55,6 @@ export default function BarFinderContextProvider({ children }) {
       barFinderDispatch({ type: 'set_location', payload: { latitude, longitude } })
     } catch (error) {
       console.warn(error)
-    } finally {
       barFinderDispatch({ type: 'set_loading', payload: false })
     }
   }

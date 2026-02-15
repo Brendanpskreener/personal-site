@@ -65,7 +65,9 @@ export default function StoreContextProvider({ children }) {
   }, [currentPageNumber])
 
   const changeFilter = useCallback((value) => {
-    if (filtered !== value && token) {
+    // Allow switching to All Products (0) always
+    // Only allow switching to Favorites (1) if logged in
+    if (filtered !== value && (value === 0 || token)) {
       storeDispatch({ type: 'set_favorites_filter', payload: value })
     }
   }, [filtered, token])
@@ -103,8 +105,15 @@ export default function StoreContextProvider({ children }) {
   useEffect(() => {
     if (token) {
       getFavorites()
+    } else if (favoritesList.length > 0) {
+      // Only clear favorites if there are any (user just logged out)
+      storeDispatch({ type: 'set_favorites_list', payload: [] })
+      // Auto-switch to All Products if viewing favorites
+      if (filtered === 1) {
+        storeDispatch({ type: 'set_favorites_filter', payload: 0 })
+      }
     }
-  }, [token, getFavorites])
+  }, [token, getFavorites, filtered, favoritesList.length])
 
   return (
     <StoreContext.Provider value={storeContext}>
